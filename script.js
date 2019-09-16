@@ -60,8 +60,8 @@ function studentInfo() {
     student.addEventListener("click", open);
   });
 
-  function open() {
-    console.log(student);
+  function open(student) {
+    // console.log(student);
     document.querySelector("#indhold").innerHTML = `
                         <div class="students">
                             <h2>${student.fullname}</h2>

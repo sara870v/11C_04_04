@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="popup">
+      <div id="luk"><button>X</button></div>
+      <div id="indhold"></div>
+    </div>
+    <h1>Studentlist of Hogwarts</h1>
+
+    <div class="dropdown">
+      <label for="#sorting">Sort by</label>
+      <select id="sorting">
+        <option value="none">None</option>
+        <option value="Firstname">Firstname</option>
+        <option value="Lastname">Lastname</option>
+        <option value="House">House</option>
+      </select>
+
+      <label for="#filtering">Filter by</label>
+      <select id="filtering">
+        <option class="option" value="all">Show all</option>
+        <option class="option" value="Hufflepuff">Hufflepuff</option>
+        <option class="option" value="Gryffindor">Gryffindor</option>
+        <option class="option" value="Ravenclaw">Ravenclaw</option>
+        <option class="option" value="Slytherin">Slytherin</option>
+      </select>
+    </div>
+
+    <div id="studentlist"></div>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,65 @@
+h1 {
+  text-align: center;
+  padding-top: 40px;
+}
+
+#studentlist {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin: 4vw;
+}
+
+.student {
+  border: 2px solid white;
+  margin: 10px;
+  padding: 50px;
+  background-color: whitesmoke;
+}
+
+.dropdown {
+  padding-left: 515px;
+}
+
+/* POPUP */
+.show {
+  display: flex;
+}
+
+#popup {
+  width: 80vw;
+  height: 90vh;
+  position: fixed;
+  background-color: rgb(172, 172, 172);
+  border: 4px solid black;
+  display: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+#indhold {
+  box-sizing: border-box;
+  background-color: rgb(172, 172, 172);
+
+  width: 60vw;
+  height: 70vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+}
+#luk {
+  box-sizing: border-box;
+  text-align: right;
+}
+#luk button {
+  font-size: 2em;
+  background-color: rgba(240, 248, 255, 0);
+  border: none;
+  cursor: grab;
+  padding: 0px;
+  margin-right: 15px;
+}
+#luk button:hover {
+  color: indianred;
+}
+/* POPUP CLOSE */

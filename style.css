@@ -10,12 +10,12 @@ h1 {
 #studentlist {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  margin: 4vw;
+  margin: 5vw;
 }
 
 .student {
   border: 2px solid white;
-  margin: 10px;
+  margin: 15px;
   padding: 50px;
   background-color: whitesmoke;
 }
@@ -66,4 +66,20 @@ h1 {
 #luk button:hover {
   color: indianred;
 }
+
+#luk2 {
+  display: none;
+}
 /* POPUP CLOSE */
+
+.expelledbtn {
+  margin: 10px 0 15px 0;
+}
+
+/* img {
+  width: 65%;
+}
+
+#indhold2 img {
+  width: 40%;
+} */

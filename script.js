@@ -8,6 +8,10 @@ let sort;
 let expell;
 let currentList = [];
 let expelledList = [];
+let gryffindor;
+let hufflepuf;
+let ravenclaw;
+let slytherin;
 
 document.querySelector("#studentlist").addEventListener("click", clickSomething);
 
@@ -104,6 +108,8 @@ function rensData(data) {
   document.querySelector(".display_expelled_students").innerHTML = `Total number of expelled students: ${expelledList.length}`;
   // document.querySelector(".display_each_house").innerHTML = `Total number of students in each house: ${house}`;
   studentsFiltering = studentsInHouse("all");
+  StudentsInEachHouse();
+
   studentInfo();
 }
 
@@ -239,29 +245,43 @@ function clickSomething(event) {
       expelledInfo.imageName = student.imageName;
       expelledInfo.id = student.id;
       console.log(studentExpelled);
-      expelledList.push(studentExpelled);
+      expelledList.push(expelledInfo);
       console.log(expelledList);
     }
+    document.querySelector(".expelledbtn").addEventListener("click", openExpelledList);
   }
+
+  StudentsInEachHouse();
 }
 
-// document.querySelector(".expelledbtn").addEventListener("click", openExpelledList);
+function StudentsInEachHouse() {
+  gryffindor = allStudents.filter(object => object.house.includes("Gryffindor"));
+  hufflepuf = allStudents.filter(object => object.house.includes("Hufflepuf"));
+  slytherin = allStudents.filter(object => object.house.includes("Slytherin"));
+  ravenclaw = allStudents.filter(object => object.house.includes("Ravenclaw"));
 
-// function openExpelledList(event) {
-//   const id = event.target.dataset.id;
-//   allStudents.forEach(student => {
-//     if (student.id == id) {
-//       document.querySelector("#indhold2").innerHTML = `
-//                         <div class="student">
-//                         <img src="img/${student.imageName}" alt ="" </img>
-//                         <h2>${student.firstName + " " + student.lastName}</h2>
-//                         <h3>${student.house}</h3>
-//                             </div>
-//                         `;
-//     }
-//   });
-//   document.querySelector("#popup2").style.display = "block";
-// }
-// document.querySelector("#luk2 button2").addEventListener("click", () => {
-//   document.querySelector("#popup2").style.display = "none";
-// });
+  document.querySelector(".house_gryffindor").innerHTML = `Students in Gryffindor: ${gryffindor.length}`;
+  document.querySelector(".house_hufflepuf").innerHTML = `Students in Hufflepuf: ${hufflepuf.length}`;
+  document.querySelector(".house_slytherin").innerHTML = `Students in Slytherin: ${slytherin.length}`;
+  document.querySelector(".house_ravenclaw").innerHTML = `Students in Ravenclaw: ${ravenclaw.length}`;
+}
+
+function openExpelledList(event) {
+  const id = event.target.dataset.id;
+  console.log(expelledList);
+  document.querySelector("#indhold2").innerHTML = "";
+  expelledList.forEach(student => {
+    document.querySelector("#indhold2").innerHTML += `
+                        <div class="student">
+                        <img src="img/${student.imageName}" alt ="" </img>
+                        <h2>${student.firstName + " " + student.lastName}</h2>
+                        <h3>${student.house}</h3>
+                            </div>
+                        `;
+  });
+  document.querySelector("#popup2").style.display = "block";
+  document.querySelector("#luk2").style.display = "block";
+}
+document.querySelector("#luk2 button").addEventListener("click", () => {
+  document.querySelector("#popup2").style.display = "none";
+});

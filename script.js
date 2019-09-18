@@ -7,6 +7,7 @@ let house;
 let sort;
 let expell;
 let currentList = [];
+let expelledList = [];
 
 document.querySelector("#studentlist").addEventListener("click", clickSomething);
 
@@ -23,12 +24,8 @@ function fetchJsonData() {
   async function getJson() {
     let jsonData = await fetch("http://petlatkea.dk/2019/hogwartsdata/students.json ");
 
-    //allStudents = await jsonData.json();
-    // studentsFiltering = studentsInHouse("all");
-
     const jsonStudents = await jsonData.json();
     rensData(jsonStudents);
-    //studentInfo();
   }
 
   getJson();
@@ -89,6 +86,9 @@ function rensData(data) {
     let house = houses.charAt(0).toUpperCase() + houses.slice(1).toLowerCase();
     student.house = house;
 
+    // let nickName = nickName.charAt(0).toUpperCase() + nickName.slice(1).toLowerCase();
+    // student.nickName = nickName;
+
     if (student.lastName == "Patil") {
       student.imageName = `${student.lastName.toLowerCase()}_${student.firstName.toLowerCase()}.png`;
     } else {
@@ -101,13 +101,13 @@ function rensData(data) {
     allStudents.push(student);
   });
   document.querySelector(".display_student_number").innerHTML = `Total number of students: ${allStudents.length}`;
-  document.querySelector(".display_expelled_students").innerHTML = `Total number of expelled students: ${expell}`;
+  document.querySelector(".display_expelled_students").innerHTML = `Total number of expelled students: ${expelledList.length}`;
+  // document.querySelector(".display_each_house").innerHTML = `Total number of students in each house: ${house}`;
   studentsFiltering = studentsInHouse("all");
   studentInfo();
 }
 
 function studentInfo() {
-  console.log(allStudents);
   let dest = document.querySelector("#studentlist");
   dest.innerHTML = "";
   studentsFiltering.forEach(student => {
@@ -117,7 +117,7 @@ function studentInfo() {
                   <h2>${student.firstName + " " + student.lastName}</h2>
                   <h3>${student.house}</h3>
                   <button data-action="expell" data-id=${student.id}>Expell</button>
-                  <button class="info">More info</button>
+                  <button class="info" data-id=${student.id}>More info</button>
               </div>`;
   });
 
@@ -125,17 +125,22 @@ function studentInfo() {
     student.addEventListener("click", open);
   });
 
-  function open(student) {
+  function open(event) {
     // console.log(student);
-    document.querySelector("#indhold").innerHTML = `
-                        <div class="students">
-                            <h2>${student.firstName}</h2>
-                  
-                            <p>${student.house}</p>
-                            <p>${student.gender}</p>
-
+    const id = event.target.dataset.id;
+    allStudents.forEach(student => {
+      if (student.id == id) {
+        document.querySelector("#indhold").innerHTML = `
+                        <div class="student">
+                        <img src="img/${student.imageName}" alt ="" </img>
+                        <h2>${student.firstName + " " + student.middelName + " " + student.lastName}</h2>
+                        
+                        
+                        <h3>${student.house}</h3>
                             </div>
                         `;
+      }
+    });
     document.querySelector("#popup").style.display = "block";
   }
   document.querySelector("#luk button").addEventListener("click", () => {
@@ -189,7 +194,7 @@ function clickSomething(event) {
 
   if (element.dataset.action === "expell") {
     console.log("Remove button clicked");
-    element.parentElement.parentElement.remove();
+    element.parentElement.remove();
     const id = element.dataset.id;
     const indexOf = studentsFiltering.findIndex(setId);
     console.log(id);
@@ -201,14 +206,62 @@ function clickSomething(event) {
         return false;
       }
     }
+    let studentExpelled = studentsFiltering.slice(indexOf, indexOf + 1);
+    studentExpelled.forEach(expelledStudents);
+
     studentsFiltering.splice(indexOf, 1);
     allStudents.splice(indexOf, 1);
     expell++;
 
-    document.querySelector(".display_student_number").innerHTML = `Students: ${allStudents.length}`;
-    document.querySelector(".display_expelled_students").innerHTML = `Expelled students: ${expell}`;
-  }
+    console.log(allStudents);
 
-  const index = element.dataset.index;
-  currentList.splice(index, 1);
+    document.querySelector(".display_student_number").innerHTML = `Total number of students: ${allStudents.length}`;
+    document.querySelector(".display_expelled_students").innerHTML = `Total number of expelled students: ${expelledList.length}`;
+    function expelledStudents(student) {
+      const studentsExpelled = {
+        firstName: "",
+        middleName: "",
+        nickName: "",
+        lastName: "",
+        imageName: "",
+        house: "",
+        gender: ""
+      };
+
+      const expelledInfo = Object.create(studentExpelled);
+      console.log(studentExpelled);
+      expelledInfo.firstName = student.firstName;
+      expelledInfo.middelName = student.middelName;
+      expelledInfo.nickName = student.nickName;
+      expelledInfo.lastName = student.lastName;
+      expelledInfo.gender = student.gender;
+      expelledInfo.house = student.house;
+      expelledInfo.imageName = student.imageName;
+      expelledInfo.id = student.id;
+      console.log(studentExpelled);
+      expelledList.push(studentExpelled);
+      console.log(expelledList);
+    }
+  }
 }
+
+// document.querySelector(".expelledbtn").addEventListener("click", openExpelledList);
+
+// function openExpelledList(event) {
+//   const id = event.target.dataset.id;
+//   allStudents.forEach(student => {
+//     if (student.id == id) {
+//       document.querySelector("#indhold2").innerHTML = `
+//                         <div class="student">
+//                         <img src="img/${student.imageName}" alt ="" </img>
+//                         <h2>${student.firstName + " " + student.lastName}</h2>
+//                         <h3>${student.house}</h3>
+//                             </div>
+//                         `;
+//     }
+//   });
+//   document.querySelector("#popup2").style.display = "block";
+// }
+// document.querySelector("#luk2 button2").addEventListener("click", () => {
+//   document.querySelector("#popup2").style.display = "none";
+// });

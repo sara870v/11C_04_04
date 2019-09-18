@@ -3,6 +3,10 @@ h1 {
   padding-top: 40px;
 }
 
+.show_details {
+  text-align: center;
+}
+
 #studentlist {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -17,7 +21,7 @@ h1 {
 }
 
 .dropdown {
-  padding-left: 515px;
+  padding-left: 550px;
 }
 
 /* POPUP */

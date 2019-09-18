@@ -62,7 +62,7 @@ function rensData(data) {
     const names = fullname.split(" ");
     const houses = jsonObject.house.trim();
     let firstName = names[0];
-    let lastName = "har ikke noget efternavn";
+    let lastName = "doe";
     firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
 
     if (names.length == 2) {
@@ -89,10 +89,14 @@ function rensData(data) {
     let house = houses.charAt(0).toUpperCase() + houses.slice(1).toLowerCase();
     student.house = house;
 
+    if (student.lastName == "Patil") {
+      student.imageName = `${student.lastName.toLowerCase()}_${student.firstName.toLowerCase()}.png`;
+    } else {
+      student.imageName = `${student.lastName.toLowerCase()}_${student.firstName.substring(0, 1).toLowerCase()}.png`;
+    }
+
     // let gender = genders.charAt(0).toUpperCase() + genders.slice(1).toLowerCase();
     // student.gender = gender;
-
-    student.imageName = `${student.lastName.toLowerCase()}_${student.firstName.substring(0, 1).toLowerCase()}.png`;
 
     allStudents.push(student);
   });
@@ -103,11 +107,13 @@ function rensData(data) {
 }
 
 function studentInfo() {
+  console.log(allStudents);
   let dest = document.querySelector("#studentlist");
   dest.innerHTML = "";
   studentsFiltering.forEach(student => {
     dest.innerHTML += `
               <div class="student">
+              <img src="img/${student.imageName}" alt ="" </img>
                   <h2>${student.firstName + " " + student.lastName}</h2>
                   <h3>${student.house}</h3>
                   <button data-action="expell" data-id=${student.id}>Expell</button>

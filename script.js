@@ -12,6 +12,7 @@ let gryffindor;
 let hufflepuf;
 let ravenclaw;
 let slytherin;
+let bloodStudents = [];
 
 document.querySelector("#studentlist").addEventListener("click", clickSomething);
 
@@ -33,6 +34,8 @@ function fetchJsonData() {
   }
 
   getJson();
+
+  fetchJsonBlood();
 }
 
 const StudentPrototype = {
@@ -42,7 +45,8 @@ const StudentPrototype = {
   lastName: "",
   imageName: "",
   house: "",
-  gender: ""
+  gender: "",
+  bloodStatus: ""
 };
 
 function rensData(data) {
@@ -62,10 +66,15 @@ function rensData(data) {
     const student = Object.create(StudentPrototype);
     const fullname = jsonObject.fullname.trim();
     const names = fullname.split(" ");
+    const nickNames = jsonObject.nickName;
     const houses = jsonObject.house.trim();
+    const genders = jsonObject.gender;
     let firstName = names[0];
     let lastName = "doe";
     firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+
+    // let nickName = nickNames.charAt(0).toUpperCase() + nickNames.slice(1).toLowerCase();
+    // student.nickName = nickName;
 
     if (names.length == 2) {
       lastName = names[1];
@@ -76,6 +85,7 @@ function rensData(data) {
     } else if (names.length == 3) {
       let middleName = names[1];
       middleName = middleName.charAt(0).toUpperCase() + middleName.slice(1).toLowerCase();
+
       lastName = names[2];
       lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase();
       student.id = create_UUID();
@@ -90,9 +100,11 @@ function rensData(data) {
     // HOUSE
     let house = houses.charAt(0).toUpperCase() + houses.slice(1).toLowerCase();
     student.house = house;
+    // GENDER
+    let gender = genders.charAt(0).toUpperCase() + genders.slice(1).toLowerCase();
+    student.gender = gender;
 
-    // let nickName = nickName.charAt(0).toUpperCase() + nickName.slice(1).toLowerCase();
-    // student.nickName = nickName;
+    // NICKNAME
 
     if (student.lastName == "Patil") {
       student.imageName = `${student.lastName.toLowerCase()}_${student.firstName.toLowerCase()}.png`;
@@ -100,15 +112,16 @@ function rensData(data) {
       student.imageName = `${student.lastName.toLowerCase()}_${student.firstName.substring(0, 1).toLowerCase()}.png`;
     }
 
-    // let gender = genders.charAt(0).toUpperCase() + genders.slice(1).toLowerCase();
-    // student.gender = gender;
-
+    if (student.bloodStatus == "") {
+      student.bloodStatus = "Muggleborn";
+    }
     allStudents.push(student);
   });
   document.querySelector(".display_student_number").innerHTML = `Total number of students: ${allStudents.length}`;
   document.querySelector(".display_expelled_students").innerHTML = `Total number of expelled students: ${expelledList.length}`;
   // document.querySelector(".display_each_house").innerHTML = `Total number of students in each house: ${house}`;
   studentsFiltering = studentsInHouse("all");
+
   StudentsInEachHouse();
 
   studentInfo();
@@ -121,9 +134,9 @@ function studentInfo() {
     dest.innerHTML += `
               <div class="student">
               <img src="img/${student.imageName}" alt ="" </img>
-                  <h2>${student.firstName + " " + student.lastName}</h2>
+                  <h2>${student.firstName + student.nickName + " " + student.lastName}</h2>
                   <h3>${student.house}</h3>
-                  <button data-action="expell" data-id=${student.id}>Expell</button>
+                  <button class ="expellbtn" data-action="expell" data-id=${student.id}>Expell</button>
                   <button class="info" data-id=${student.id}>More info</button>
               </div>`;
   });
@@ -141,11 +154,20 @@ function studentInfo() {
                         <div class="student">
                         <img src="img/${student.imageName}" alt ="" </img>
                         <h2>${student.firstName + " " + student.middelName + " " + student.lastName}</h2>
-                        
-                        
+                        <p>${student.bloodStatus}</p>
+                        <p>Gender: ${student.gender}</p>
                         <h3>${student.house}</h3>
                             </div>
                         `;
+        if (student.house === "Gryffindor") {
+          document.querySelector("#popup .student").className = "gryffindor";
+        } else if (student.house === "Hufflepuff") {
+          document.querySelector("#popup .student").className = "hufflepuf";
+        } else if (student.house === "Ravenclaw") {
+          document.querySelector("#popup .student").className = "ravenclaw";
+        } else {
+          document.querySelector("#popup .student").className = "slytherin";
+        }
       }
     });
     document.querySelector("#popup").style.display = "block";
@@ -170,8 +192,6 @@ function sortBy() {
     studentsFiltering.sort(function(a, b) {
       return a.house.localeCompare(b.house);
     });
-  } else if (sort == "none-sort") {
-    fetchJsonData();
   }
 
   studentInfo();
@@ -200,11 +220,9 @@ function clickSomething(event) {
   const element = event.target;
 
   if (element.dataset.action === "expell") {
-    console.log("Remove button clicked");
     element.parentElement.remove();
     const id = element.dataset.id;
     const indexOf = studentsFiltering.findIndex(setId);
-    console.log(id);
 
     function setId(student) {
       if (student.id == id) {
@@ -220,8 +238,6 @@ function clickSomething(event) {
     allStudents.splice(indexOf, 1);
     expell++;
 
-    console.log(allStudents);
-
     document.querySelector(".display_student_number").innerHTML = `Total number of students: ${allStudents.length}`;
     document.querySelector(".display_expelled_students").innerHTML = `Total number of expelled students: ${expelledList.length}`;
     function expelledStudents(student) {
@@ -236,7 +252,7 @@ function clickSomething(event) {
       };
 
       const expelledInfo = Object.create(studentExpelled);
-      console.log(studentExpelled);
+
       expelledInfo.firstName = student.firstName;
       expelledInfo.middelName = student.middelName;
       expelledInfo.nickName = student.nickName;
@@ -245,10 +261,10 @@ function clickSomething(event) {
       expelledInfo.house = student.house;
       expelledInfo.imageName = student.imageName;
       expelledInfo.id = student.id;
-      console.log(studentExpelled);
+
       expelledList.push(expelledInfo);
-      console.log(expelledList);
     }
+
     document.querySelector(".expelledbtn").addEventListener("click", openExpelledList);
   }
 
@@ -268,8 +284,9 @@ function StudentsInEachHouse() {
 }
 
 function openExpelledList(event) {
+  document.querySelector(".student").classList.add(".fade_out");
   const id = event.target.dataset.id;
-  console.log(expelledList);
+  // console.log(expelledList);
   document.querySelector("#indhold2").innerHTML = "";
   expelledList.forEach(student => {
     document.querySelector("#indhold2").innerHTML += `
@@ -277,6 +294,7 @@ function openExpelledList(event) {
                         <img src="img/${student.imageName}" alt ="" </img>
                         <h2>${student.firstName + " " + student.lastName}</h2>
                         <h3>${student.house}</h3>
+                        <p>${student.bloodStatus}</p>
                             </div>
                         `;
   });
@@ -286,3 +304,48 @@ function openExpelledList(event) {
 document.querySelector("#luk2 button").addEventListener("click", () => {
   document.querySelector("#popup2").style.display = "none";
 });
+
+async function fetchJsonBlood() {
+  let jsonData = await fetch("http://petlatkea.dk/2019/hogwartsdata/families.json");
+
+  bloodStudents = await jsonData.json();
+
+  const halfBloodStudent = bloodStudents.half;
+  const pureBloodStudent = bloodStudents.pure;
+
+  findHalfBlood(halfBloodStudent);
+  findPureBlood(pureBloodStudent);
+
+  // console.log(pureBloodStudent);
+}
+
+function findHalfBlood(halfBloodStudent) {
+  let half;
+
+  halfBloodStudent.forEach(student => {
+    half = student;
+
+    allStudents.forEach(student => {
+      if (student.lastName == half) {
+        // console.log("The student is halfblood");
+        student.bloodStatus = "Halfblood";
+      }
+    });
+  });
+}
+
+function findPureBlood(pureBloodStudent) {
+  let pure;
+
+  pureBloodStudent.forEach(student => {
+    pure = student;
+
+    allStudents.forEach(student => {
+      if (student.lastName == pure) {
+        // console.log("The student is pureblood");
+        student.bloodStatus = "Pureblood";
+      }
+    });
+  });
+  // console.log(allStudents);
+}

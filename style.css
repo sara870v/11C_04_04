@@ -1,6 +1,24 @@
+body {
+  margin: 0;
+}
+
 h1 {
   text-align: center;
   padding-top: 40px;
+  font-family: "Courgette", cursive;
+}
+
+h2 {
+  font-family: "Courgette", cursive;
+}
+
+h3,
+h4 {
+  font-family: "Cinzel", serif;
+}
+p,
+button {
+  font-family: "Cinzel", serif;
 }
 
 .show_details {
@@ -18,10 +36,12 @@ h1 {
   margin: 15px;
   padding: 50px;
   background-color: whitesmoke;
+  text-align: center;
+  border-radius: 10px;
 }
 
 .dropdown {
-  padding-left: 550px;
+  padding-left: 600px;
 }
 
 button {
@@ -51,27 +71,29 @@ button:hover {
 }
 
 #popup {
-  width: 80vw;
+  width: 50vw;
   height: 90vh;
   position: fixed;
   background-color: rgb(172, 172, 172);
-  border: 4px solid black;
+  /* border: 4px solid black; */
   display: none;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  border-radius: 10px;
 }
+
 #indhold {
   box-sizing: border-box;
-  background-color: rgb(172, 172, 172);
-
+  /* background-color: rgb(172, 172, 172); */
   width: 60vw;
-  height: 70vh;
+  height: 76vh;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   position: fixed;
 }
+
 #luk {
   box-sizing: border-box;
   text-align: right;
@@ -82,7 +104,7 @@ button:hover {
   border: none;
   cursor: grab;
   padding: 0px;
-  margin-right: 15px;
+  margin: 10px 20px 0 0;
 }
 #luk button:hover {
   color: indianred;
@@ -103,10 +125,109 @@ button:hover {
   width: 1000px;
   margin: 0 auto;
   /* margin: 5vw; */
-  background-color: rgb(78, 94, 78);
+  background-color: rgb(121, 133, 121);
   margin-bottom: 100px;
 }
 
 #luk2 {
   margin: 15px;
+}
+
+.gryffindor {
+  /* background-color: red; */
+  width: 40vw;
+  height: 70vh;
+  margin: 0 auto;
+  text-align: center;
+  padding: 15px;
+  background: -webkit-linear-gradient(30deg, #c41414 50%, #c4b70d 50%);
+  border-radius: 10px;
+}
+
+.hufflepuf {
+  background-color: yellow;
+  width: 40vw;
+  height: 70vh;
+  margin: 0 auto;
+  text-align: center;
+  padding: 15px;
+  background: -webkit-linear-gradient(30deg, #b5b813 50%, #141414a9 50%);
+  border-radius: 10px;
+  /* background-image: url(crest/gryffindor.jpeg); */
+}
+
+.ravenclaw {
+  /* background-color: blue; */
+  width: 40vw;
+  height: 70vh;
+  margin: 0 auto;
+  text-align: center;
+  padding: 15px;
+  background: -webkit-linear-gradient(30deg, #153d88 50%, #795c34 50%);
+  border-radius: 10px;
+}
+
+.slytherin {
+  background-color: green;
+  width: 40vw;
+  height: 70vh;
+  margin: 0 auto;
+  text-align: center;
+  padding: 15px;
+  background: -webkit-linear-gradient(30deg, #16500b 50%, #6a6e6c 50%);
+  border-radius: 10px;
+}
+
+.crest_gryffindor {
+  background-image: url(crest/gryffindor.jpeg);
+}
+
+.expellbtn {
+  background-color: rgba(192, 39, 39, 0.829);
+}
+
+.info {
+  background-color: rgba(0, 128, 0, 0.808);
+}
+
+img {
+  width: 150px;
+}
+
+.cover {
+  background-image: url(hogwarts.jpg);
+  background-size: cover;
+
+  background-attachment: fixed;
+  width: 100vw;
+  height: 80vh;
+}
+
+.logo {
+  background-image: url(logo7.png);
+  background-repeat: no-repeat;
+  /* background-size: inherit; */
+  position: absolute;
+  top: 10px;
+  left: 400px;
+  /* background-attachment: fixed; */
+  width: 45vw;
+  height: 80vh;
+}
+
+.fade_out {
+  animation-name: fade_out_kf;
+  animation-duration: 1.5s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fade_out_kf {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }

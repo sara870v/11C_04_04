@@ -46,7 +46,8 @@ const StudentPrototype = {
   imageName: "",
   house: "",
   gender: "",
-  bloodStatus: ""
+  bloodStatus: "",
+  squadTeam: ""
 };
 
 function rensData(data) {
@@ -66,9 +67,10 @@ function rensData(data) {
     const student = Object.create(StudentPrototype);
     const fullname = jsonObject.fullname.trim();
     const names = fullname.split(" ");
-    const nickNames = jsonObject.nickName;
+    // const nickNames = jsonObject.names[];
     const houses = jsonObject.house.trim();
     const genders = jsonObject.gender;
+    const bloodStatus = jsonObject.bloodStatus;
     let firstName = names[0];
     let lastName = "doe";
     firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
@@ -85,6 +87,9 @@ function rensData(data) {
     } else if (names.length == 3) {
       let middleName = names[1];
       middleName = middleName.charAt(0).toUpperCase() + middleName.slice(1).toLowerCase();
+
+      // TODO: hvis middelName har " i sig, så er det ikke middelName, men nickName
+      student.middelName = middleName;
 
       lastName = names[2];
       lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase();
@@ -115,6 +120,9 @@ function rensData(data) {
     if (student.bloodStatus == "") {
       student.bloodStatus = "Muggleborn";
     }
+
+    student.squadTeam = false;
+
     allStudents.push(student);
   });
   document.querySelector(".display_student_number").innerHTML = `Total number of students: ${allStudents.length}`;
@@ -123,7 +131,6 @@ function rensData(data) {
   studentsFiltering = studentsInHouse("all");
 
   StudentsInEachHouse();
-
   studentInfo();
 }
 
@@ -153,27 +160,65 @@ function studentInfo() {
         document.querySelector("#indhold").innerHTML = `
                         <div class="student">
                         <img src="img/${student.imageName}" alt ="" </img>
-                        <h2>${student.firstName + " " + student.middelName + " " + student.lastName}</h2>
+                        <h2>${student.firstName} ${student.middelName != undefined ? student.middelName : " "} ${student.lastName}</h2>
                         <p>${student.bloodStatus}</p>
                         <p>Gender: ${student.gender}</p>
                         <h3>${student.house}</h3>
+                        <button class="prefect_btn">Prefect</button>
+                        <button class="squad_btn" data-id=${student.id}>Squad</button>
+                        <div class="crest_house"><img></div>
                             </div>
                         `;
         if (student.house === "Gryffindor") {
           document.querySelector("#popup .student").className = "gryffindor";
+          document.querySelector("#indhold .crest_house img").src = "crest/gryffindor2.png";
         } else if (student.house === "Hufflepuff") {
           document.querySelector("#popup .student").className = "hufflepuf";
+          document.querySelector("#indhold .crest_house img").src = "crest/hufflepuf2.png";
         } else if (student.house === "Ravenclaw") {
           document.querySelector("#popup .student").className = "ravenclaw";
+          document.querySelector("#indhold .crest_house img").src = "crest/ravenclaw2.png";
         } else {
           document.querySelector("#popup .student").className = "slytherin";
+          document.querySelector("#indhold .crest_house img").src = "crest/slytherin2.png";
         }
       }
     });
     document.querySelector("#popup").style.display = "block";
+    document.querySelector(".squad_btn").addEventListener("click", squadStudents);
   }
   document.querySelector("#luk button").addEventListener("click", () => {
     document.querySelector("#popup").style.display = "none";
+  });
+  console.log(allStudents);
+}
+
+function squadStudents() {
+  const id = this.dataset.id;
+
+  allStudents.forEach(student => {
+    if (student.bloodStatus == "Pureblood" || student.house == "Slytherin") {
+      if (student.id == id && student.squadTeam == false) {
+        student.squadTeam = true;
+        setTimeout(function() {
+          removeSquadTeam(id);
+        }, 3000);
+        console.log(student.squadTeam);
+      } else if (student.id == id && student.squadTeam == true) {
+        student.squadTeam = false;
+        console.log(student.squadTeam);
+      }
+    }
+  });
+}
+
+function removeSquadTeam(id) {
+  console.log("hello");
+  allStudents.forEach(student => {
+    if (student.id == id && student.squadTeam == true) {
+      student.squadTeam = false;
+      console.log(student.squadTeam);
+    }
   });
 }
 
@@ -223,6 +268,7 @@ function clickSomething(event) {
     element.parentElement.remove();
     const id = element.dataset.id;
     const indexOf = studentsFiltering.findIndex(setId);
+    const indexOfAll = allStudents.findIndex(setId);
 
     function setId(student) {
       if (student.id == id) {
@@ -232,38 +278,20 @@ function clickSomething(event) {
       }
     }
     let studentExpelled = studentsFiltering.slice(indexOf, indexOf + 1);
-    studentExpelled.forEach(expelledStudents);
+    // if (student.lastName === "Davidsen") {
+    // } else {
+    // }
+
+    studentExpelled = studentExpelled[0];
+
+    expelledList.push(studentExpelled);
 
     studentsFiltering.splice(indexOf, 1);
-    allStudents.splice(indexOf, 1);
+    allStudents.splice(indexOfAll, 1);
     expell++;
 
     document.querySelector(".display_student_number").innerHTML = `Total number of students: ${allStudents.length}`;
     document.querySelector(".display_expelled_students").innerHTML = `Total number of expelled students: ${expelledList.length}`;
-    function expelledStudents(student) {
-      const studentsExpelled = {
-        firstName: "",
-        middleName: "",
-        nickName: "",
-        lastName: "",
-        imageName: "",
-        house: "",
-        gender: ""
-      };
-
-      const expelledInfo = Object.create(studentExpelled);
-
-      expelledInfo.firstName = student.firstName;
-      expelledInfo.middelName = student.middelName;
-      expelledInfo.nickName = student.nickName;
-      expelledInfo.lastName = student.lastName;
-      expelledInfo.gender = student.gender;
-      expelledInfo.house = student.house;
-      expelledInfo.imageName = student.imageName;
-      expelledInfo.id = student.id;
-
-      expelledList.push(expelledInfo);
-    }
 
     document.querySelector(".expelledbtn").addEventListener("click", openExpelledList);
   }
@@ -315,8 +343,6 @@ async function fetchJsonBlood() {
 
   findHalfBlood(halfBloodStudent);
   findPureBlood(pureBloodStudent);
-
-  // console.log(pureBloodStudent);
 }
 
 function findHalfBlood(halfBloodStudent) {
@@ -327,7 +353,6 @@ function findHalfBlood(halfBloodStudent) {
 
     allStudents.forEach(student => {
       if (student.lastName == half) {
-        // console.log("The student is halfblood");
         student.bloodStatus = "Halfblood";
       }
     });
@@ -342,10 +367,23 @@ function findPureBlood(pureBloodStudent) {
 
     allStudents.forEach(student => {
       if (student.lastName == pure) {
-        // console.log("The student is pureblood");
         student.bloodStatus = "Pureblood";
       }
     });
   });
-  // console.log(allStudents);
+
+  hackingBloodStatus();
+}
+
+function hackingBloodStatus() {
+  const arrayOfBloodStatus = ["Pureblood", "Halfblood", "Muggleborn"];
+  const bloodStatus = arrayOfBloodStatus[Math.floor(Math.random() * arrayOfBloodStatus.length)];
+  allStudents.forEach(student => {
+    if (student.bloodStatus === "Halfblood" || student.bloodStatus === "Muggleborn") {
+      student.bloodStatus = "Pureblood";
+    } else {
+      student.bloodStatus = bloodStatus;
+    }
+    console.log(bloodStatus);
+  });
 }

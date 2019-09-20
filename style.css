@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  background-color: #f1d7a9d0;
 }
 
 h1 {
@@ -32,16 +33,16 @@ button {
 }
 
 .student {
-  border: 2px solid white;
+  border: 2px solid rgba(255, 255, 255, 1);
   margin: 15px;
   padding: 50px;
-  background-color: whitesmoke;
+  background-color: #e8dcca;
   text-align: center;
   border-radius: 10px;
 }
 
 .dropdown {
-  padding-left: 600px;
+  padding: 0px 0 0 600px;
 }
 
 button {
@@ -74,7 +75,8 @@ button:hover {
   width: 50vw;
   height: 90vh;
   position: fixed;
-  background-color: rgb(172, 172, 172);
+  background-color: #c7ad7f;
+  /* background-color: rgb(172, 172, 172); */
   /* border: 4px solid black; */
   display: none;
   top: 50%;
@@ -87,7 +89,7 @@ button:hover {
   box-sizing: border-box;
   /* background-color: rgb(172, 172, 172); */
   width: 60vw;
-  height: 76vh;
+  height: 85vh;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -112,6 +114,7 @@ button:hover {
 
 #luk2 {
   display: none;
+  text-align: center;
 }
 /* POPUP CLOSE */
 
@@ -136,7 +139,7 @@ button:hover {
 .gryffindor {
   /* background-color: red; */
   width: 40vw;
-  height: 70vh;
+  height: 80vh;
   margin: 0 auto;
   text-align: center;
   padding: 15px;
@@ -147,7 +150,7 @@ button:hover {
 .hufflepuf {
   background-color: yellow;
   width: 40vw;
-  height: 70vh;
+  height: 80vh;
   margin: 0 auto;
   text-align: center;
   padding: 15px;
@@ -159,7 +162,7 @@ button:hover {
 .ravenclaw {
   /* background-color: blue; */
   width: 40vw;
-  height: 70vh;
+  height: 80vh;
   margin: 0 auto;
   text-align: center;
   padding: 15px;
@@ -170,7 +173,7 @@ button:hover {
 .slytherin {
   background-color: green;
   width: 40vw;
-  height: 70vh;
+  height: 80vh;
   margin: 0 auto;
   text-align: center;
   padding: 15px;
@@ -209,7 +212,7 @@ img {
   /* background-size: inherit; */
   position: absolute;
   top: 10px;
-  left: 400px;
+  left: 420px;
   /* background-attachment: fixed; */
   width: 45vw;
   height: 80vh;
@@ -230,4 +233,15 @@ img {
   100% {
     opacity: 0;
   }
+}
+
+.house_parent {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+label {
+  font-family: "Cinzel", serif;
 }

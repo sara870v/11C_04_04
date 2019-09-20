@@ -14,17 +14,18 @@ let ravenclaw;
 let slytherin;
 let bloodStudents = [];
 
-document.querySelector("#studentlist").addEventListener("click", clickSomething);
+document.querySelector("#studentlist").addEventListener("click", expellStudents);
 
 document.querySelectorAll("#filtering").forEach(option => {
   option.addEventListener("change", filtering);
 });
 
 document.querySelectorAll("#sorting").forEach(option => {
-  option.addEventListener("change", sortBy);
+  option.addEventListener("change", sortAs);
 });
 
 function fetchJsonData() {
+  // FETCHING FIRST JSON, GOING TO rensData
   let dest = document.querySelector("#studentlist");
   async function getJson() {
     let jsonData = await fetch("http://petlatkea.dk/2019/hogwartsdata/students.json ");
@@ -47,10 +48,12 @@ const StudentPrototype = {
   house: "",
   gender: "",
   bloodStatus: "",
-  squadTeam: ""
+  squadTeam: "",
+  prefect: ""
 };
 
 function rensData(data) {
+  // CLEANING DATA. Making names spelled right, with correct uppercase and lowercase, set const for houses, genders and so on
   dontExpell();
   // FROM URL https://www.w3resource.com/javascript-exercises/javascript-math-exercise-23.php
   function create_UUID() {
@@ -76,9 +79,6 @@ function rensData(data) {
     let lastName = "doe";
     firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
 
-    // let nickName = nickNames.charAt(0).toUpperCase() + nickNames.slice(1).toLowerCase();
-    // student.nickName = nickName;
-
     if (names.length == 2) {
       lastName = names[1];
       lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase();
@@ -88,8 +88,6 @@ function rensData(data) {
     } else if (names.length == 3) {
       let middleName = names[1];
       middleName = middleName.charAt(0).toUpperCase() + middleName.slice(1).toLowerCase();
-
-      // TODO: hvis middelName har " i sig, så er det ikke middelName, men nickName
       student.middelName = middleName;
 
       lastName = names[2];
@@ -110,8 +108,6 @@ function rensData(data) {
     let gender = genders.charAt(0).toUpperCase() + genders.slice(1).toLowerCase();
     student.gender = gender;
 
-    // NICKNAME
-
     if (student.lastName == "Patil") {
       student.imageName = `${student.lastName.toLowerCase()}_${student.firstName.toLowerCase()}.png`;
     } else {
@@ -121,6 +117,7 @@ function rensData(data) {
     if (student.bloodStatus == "") {
       student.bloodStatus = "Muggleborn";
     }
+    student.prefect = "";
 
     student.squadTeam = false;
 
@@ -128,6 +125,7 @@ function rensData(data) {
   });
 
   function dontExpell() {
+    // Creating myself as a student, where I push the information and I get on the same list as rest of the students
     const student = Object.create(StudentPrototype);
 
     student.firstName = "Sarah";
@@ -135,7 +133,8 @@ function rensData(data) {
     student.lastName = "Davidsen";
     student.gender = "Girl";
     student.id = create_UUID();
-    // student.imageName = "an.jpg";
+    student.house = "Ravenclaw";
+    student.imageName = "an.jpg";
     student.bloodStatus = "Pureblood";
 
     allStudents.push(student);
@@ -151,6 +150,7 @@ function rensData(data) {
 }
 
 function studentInfo() {
+  // template with information on each student in the normal studentlist
   let dest = document.querySelector("#studentlist");
   dest.innerHTML = "";
   studentsFiltering.forEach(student => {
@@ -163,12 +163,14 @@ function studentInfo() {
                   <button class="info" data-id=${student.id}>More info</button>
               </div>`;
   });
+  document.querySelector(".student .expellbtn").classList.add(".ani");
 
   document.querySelectorAll(".info").forEach(student => {
     student.addEventListener("click", open);
   });
 
   function open(event) {
+    // template with information on specific student, in a popup
     // console.log(student);
     const id = event.target.dataset.id;
     allStudents.forEach(student => {
@@ -180,8 +182,9 @@ function studentInfo() {
                         <p>${student.bloodStatus}</p>
                         <p>Gender: ${student.gender}</p>
                         <h3>${student.house}</h3>
-                        <button class="prefect_btn">Prefect</button>
-                        <button class="squad_btn" data-id=${student.id}>Squad</button>
+                        <p>${student.prefect != undefined ? student.prefect : ""}</p>;
+                        <button class="prefect_btn" data-id=${student.id}>Add to prefect</button>
+                        <button class="squad_btn" data-id=${student.id}>Add to squad</button>
                         <div class="crest_house"><img></div>
                             </div>
                         `;
@@ -202,25 +205,45 @@ function studentInfo() {
     });
     document.querySelector("#popup").style.display = "block";
     document.querySelector(".squad_btn").addEventListener("click", squadStudents);
+    document.querySelector(".prefect_btn").addEventListener("click", prefectStudents);
   }
+
   document.querySelector("#luk button").addEventListener("click", () => {
     document.querySelector("#popup").style.display = "none";
   });
   console.log(allStudents);
 }
 
+function prefectStudents() {
+  console.log("hej");
+  const id = this.dataset.id;
+  allStudents.forEach(student => {
+    if (student.id == id && student.prefect == "") {
+      student.prefect = "Prefect";
+      document.querySelector(".prefect_btn").textContent = "Remove student as prefect";
+    } else if (student.id == id && student.prefect == "Prefect") {
+      student.prefect = "";
+
+      document.querySelector(".prefect_btn").textContent = "Add to prefect";
+    }
+  });
+}
+
 function squadStudents() {
+  // Setting squads on students, hacking it making it dissapear after a timer
   const id = this.dataset.id;
 
   allStudents.forEach(student => {
     if (student.bloodStatus == "Pureblood" || student.house == "Slytherin") {
       if (student.id == id && student.squadTeam == false) {
+        document.querySelector(".squad_btn").textContent = "Remove student from squad";
         student.squadTeam = true;
         setTimeout(function() {
           removeSquadTeam(id);
         }, 3000);
         console.log(student.squadTeam);
       } else if (student.id == id && student.squadTeam == true) {
+        document.querySelector(".squad_btn").textContent = "Add to squad";
         student.squadTeam = false;
         console.log(student.squadTeam);
       }
@@ -229,6 +252,7 @@ function squadStudents() {
 }
 
 function removeSquadTeam(id) {
+  // "Removing" the student from squad team
   console.log("hello");
   allStudents.forEach(student => {
     if (student.id == id && student.squadTeam == true) {
@@ -238,7 +262,8 @@ function removeSquadTeam(id) {
   });
 }
 
-function sortBy() {
+function sortAs() {
+  // sort by firstname, lastname and house
   sort = this.value;
 
   if (sort == "firstname-sort") {
@@ -259,12 +284,14 @@ function sortBy() {
 }
 
 function filtering() {
+  // setting value and making it go to next function where it filters depending on what house is chosen
   house = this.value;
   studentsFiltering = studentsInHouse(house);
   studentInfo();
 }
 
 function studentsInHouse(house) {
+  // Filtering depending on what house you choose
   const studentList = allStudents.filter(filterByHouse);
 
   function filterByHouse(student) {
@@ -277,7 +304,8 @@ function studentsInHouse(house) {
   return studentList;
 }
 
-function clickSomething(event) {
+function expellStudents(event) {
+  // Expelling students and setting details on the list, with number of students and number of expelled students
   const element = event.target;
 
   if (element.dataset.action === "expell") {
@@ -294,7 +322,6 @@ function clickSomething(event) {
     }
     let studentExpelled = studentsFiltering.slice(indexOf, indexOf + 1);
     if (studentsFiltering[indexOf].firstName === "Sarah") {
-      hacked();
     } else {
       element.parentElement.remove();
       studentExpelled = studentExpelled[0];
@@ -315,6 +342,7 @@ function clickSomething(event) {
 }
 
 function StudentsInEachHouse() {
+  // Setting detail on the list with the amount of students in each house
   gryffindor = allStudents.filter(object => object.house.includes("Gryffindor"));
   hufflepuf = allStudents.filter(object => object.house.includes("Hufflepuf"));
   slytherin = allStudents.filter(object => object.house.includes("Slytherin"));
@@ -327,17 +355,20 @@ function StudentsInEachHouse() {
 }
 
 function openExpelledList(event) {
+  // template with what information will be shown on the student when you open the list of expelled students
   document.querySelector(".student").classList.add(".fade_out");
   const id = event.target.dataset.id;
-  // console.log(expelledList);
+
   document.querySelector("#indhold2").innerHTML = "";
   expelledList.forEach(student => {
     document.querySelector("#indhold2").innerHTML += `
+                          
                         <div class="student">
                         <img src="img/${student.imageName}" alt ="" </img>
                         <h2>${student.firstName + " " + student.lastName}</h2>
                         <h3>${student.house}</h3>
                         <p>${student.bloodStatus}</p>
+                        <p>${student.prefect}</p>
                             </div>
                         `;
   });
@@ -349,6 +380,7 @@ document.querySelector("#luk2 button").addEventListener("click", () => {
 });
 
 async function fetchJsonBlood() {
+  // fetching the second json file, with lastnames, whereafter the bloodstatus is defined of each student.
   let jsonData = await fetch("http://petlatkea.dk/2019/hogwartsdata/families.json");
 
   bloodStudents = await jsonData.json();
@@ -361,6 +393,7 @@ async function fetchJsonBlood() {
 }
 
 function findHalfBlood(halfBloodStudent) {
+  // setting variables if the student is halfblood
   let half;
 
   halfBloodStudent.forEach(student => {
@@ -375,6 +408,7 @@ function findHalfBlood(halfBloodStudent) {
 }
 
 function findPureBlood(pureBloodStudent) {
+  // setting variables if the student is pureblood
   let pure;
 
   pureBloodStudent.forEach(student => {
@@ -391,6 +425,7 @@ function findPureBlood(pureBloodStudent) {
 }
 
 function hackingBloodStatus() {
+  // hacking the list, making bloodstatus random
   const arrayOfBloodStatus = ["Pureblood", "Halfblood", "Muggleborn"];
   const bloodStatus = arrayOfBloodStatus[Math.floor(Math.random() * arrayOfBloodStatus.length)];
   allStudents.forEach(student => {

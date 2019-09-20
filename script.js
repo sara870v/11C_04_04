@@ -51,6 +51,7 @@ const StudentPrototype = {
 };
 
 function rensData(data) {
+  dontExpell();
   // FROM URL https://www.w3resource.com/javascript-exercises/javascript-math-exercise-23.php
   function create_UUID() {
     var dt = new Date().getTime();
@@ -125,9 +126,24 @@ function rensData(data) {
 
     allStudents.push(student);
   });
+
+  function dontExpell() {
+    const student = Object.create(StudentPrototype);
+
+    student.firstName = "Sarah";
+    student.middleName = "Gabriella";
+    student.lastName = "Davidsen";
+    student.gender = "Girl";
+    student.id = create_UUID();
+    // student.imageName = "an.jpg";
+    student.bloodStatus = "Pureblood";
+
+    allStudents.push(student);
+  }
+
   document.querySelector(".display_student_number").innerHTML = `Total number of students: ${allStudents.length}`;
   document.querySelector(".display_expelled_students").innerHTML = `Total number of expelled students: ${expelledList.length}`;
-  // document.querySelector(".display_each_house").innerHTML = `Total number of students in each house: ${house}`;
+
   studentsFiltering = studentsInHouse("all");
 
   StudentsInEachHouse();
@@ -265,7 +281,6 @@ function clickSomething(event) {
   const element = event.target;
 
   if (element.dataset.action === "expell") {
-    element.parentElement.remove();
     const id = element.dataset.id;
     const indexOf = studentsFiltering.findIndex(setId);
     const indexOfAll = allStudents.findIndex(setId);
@@ -278,21 +293,21 @@ function clickSomething(event) {
       }
     }
     let studentExpelled = studentsFiltering.slice(indexOf, indexOf + 1);
-    // if (student.lastName === "Davidsen") {
-    // } else {
-    // }
+    if (studentsFiltering[indexOf].firstName === "Sarah") {
+      hacked();
+    } else {
+      element.parentElement.remove();
+      studentExpelled = studentExpelled[0];
 
-    studentExpelled = studentExpelled[0];
+      expelledList.push(studentExpelled);
 
-    expelledList.push(studentExpelled);
+      studentsFiltering.splice(indexOf, 1);
+      allStudents.splice(indexOfAll, 1);
+      expell++;
 
-    studentsFiltering.splice(indexOf, 1);
-    allStudents.splice(indexOfAll, 1);
-    expell++;
-
-    document.querySelector(".display_student_number").innerHTML = `Total number of students: ${allStudents.length}`;
-    document.querySelector(".display_expelled_students").innerHTML = `Total number of expelled students: ${expelledList.length}`;
-
+      document.querySelector(".display_student_number").innerHTML = `Total number of students: ${allStudents.length}`;
+      document.querySelector(".display_expelled_students").innerHTML = `Total number of expelled students: ${expelledList.length}`;
+    }
     document.querySelector(".expelledbtn").addEventListener("click", openExpelledList);
   }
 
@@ -386,4 +401,8 @@ function hackingBloodStatus() {
     }
     console.log(bloodStatus);
   });
+}
+
+function hacked() {
+  alert("Hello");
 }

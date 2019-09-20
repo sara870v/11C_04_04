@@ -106,7 +106,7 @@ button:hover {
   border: none;
   cursor: grab;
   padding: 0px;
-  margin: 10px 20px 0 0;
+  margin: 0 20px 0 0;
 }
 #luk button:hover {
   color: indianred;

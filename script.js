@@ -117,6 +117,7 @@ function rensData(data) {
     if (student.bloodStatus == "") {
       student.bloodStatus = "Muggleborn";
     }
+
     student.prefect = "";
 
     student.squadTeam = false;
@@ -163,7 +164,12 @@ function studentInfo() {
                   <button class="info" data-id=${student.id}>More info</button>
               </div>`;
   });
-  document.querySelector(".student .expellbtn").classList.add(".ani");
+  document.querySelector(".student .expellbtn").addEventListener("click", () => {
+    document.querySelector("#studentlist").className = "fade_out";
+    setTimeout(function() {
+      document.querySelector(".showdisplay").style.display = "block";
+    }, 2000);
+  });
 
   document.querySelectorAll(".info").forEach(student => {
     student.addEventListener("click", open);
@@ -179,10 +185,11 @@ function studentInfo() {
                         <div class="student">
                         <img src="img/${student.imageName}" alt ="" </img>
                         <h2>${student.firstName} ${student.middelName != undefined ? student.middelName : " "} ${student.lastName}</h2>
+                        <h3>${student.house}</h3>
                         <p>${student.bloodStatus}</p>
                         <p>Gender: ${student.gender}</p>
-                        <h3>${student.house}</h3>
-                        <p>${student.prefect != undefined ? student.prefect : ""}</p>;
+                       
+                        <p>${student.prefect != undefined ? student.prefect : ""}</p>
                         <button class="prefect_btn" data-id=${student.id}>Add to prefect</button>
                         <button class="squad_btn" data-id=${student.id}>Add to squad</button>
                         <div class="crest_house"><img></div>
@@ -211,8 +218,11 @@ function studentInfo() {
   document.querySelector("#luk button").addEventListener("click", () => {
     document.querySelector("#popup").style.display = "none";
   });
+
   console.log(allStudents);
 }
+
+// PREFECT
 
 function prefectStudents() {
   console.log("hej");
@@ -226,8 +236,48 @@ function prefectStudents() {
 
       document.querySelector(".prefect_btn").textContent = "Add to prefect";
     }
+    // if (student.house == "Hufflepuf") {
+    //   checkPrefectsHufflepuff(student);
+    // } else if (student.house == "Gryffindor") {
+    //   checkPrefectsGryffindor(student);
+    // } else if (student.house == "Ravenclaw") {
+    //   checkPrefectsRavenclaw(student);
+    // } else if (student.house == "Slytherin") {
+    //   checkPrefectsSlytherin(student);
+    // }
   });
 }
+
+// function checkPrefectHufflepuff(student) {
+//   let prefect = hufflepuf.filter(x => x.prefect.includes("Prefect"));
+//   console.log(prefect.length == 2);
+//   if (student.prefect == "" && prefect.length == 2) {
+//     console.log("stop");
+//   }
+// }
+// function checkPrefectsGryffindor(student) {
+//   let prefect = gryffindor.filter(x => x.prefect.includes("Prefect"));
+//   console.log(prefect.length == 2);
+//   if (student.prefect == "" && prefect.length == 2) {
+//     console.log("stop");
+//   }
+// }
+// function checkPrefectsRavenclaw(student) {
+//   let prefect = ravenclaw.filter(x => x.prefect.includes("Prefect"));
+//   console.log(prefect.length == 2);
+//   if (student.prefect == "" && prefect.length == 2) {
+//     console.log("stop");
+//   }
+// }
+// function checkPrefectsSlytherin(student) {
+//   let prefect = slytherin.filter(x => x.prefect.includes("Prefect"));
+//   console.log(prefect.length == 2);
+//   if (student.prefect == "" && prefect.length == 2) {
+//     console.log("stop");
+//   }
+// }
+
+// PREFECT
 
 function squadStudents() {
   // Setting squads on students, hacking it making it dissapear after a timer

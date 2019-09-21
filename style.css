@@ -39,6 +39,7 @@ button {
   /* background-size: inherit; */
   position: absolute;
   top: 10px;
+
   left: 420px;
   /* background-attachment: fixed; */
   width: 45vw;
@@ -135,11 +136,12 @@ button:hover {
   box-sizing: border-box;
   /* background-color: rgb(172, 172, 172); */
   width: 60vw;
-  height: 85vh;
+  height: 87vh;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   position: fixed;
+  margin-top: 10px;
 }
 
 #luk {
@@ -152,10 +154,7 @@ button:hover {
   border: none;
   cursor: grab;
   padding: 0px;
-  margin: 0 20px 0 0;
-}
-#luk button:hover {
-  color: indianred;
+  margin: 0 15px 0 0;
 }
 
 #luk2 {

@@ -171,11 +171,6 @@ function studentInfo() {
     }, 2000);
   });
 
-  document.querySelector(".expellbtn").addEventListener("click", () => {
-    console.log("halli");
-    document.querySelector(".student").className = "showdisplay";
-  });
-
   document.querySelectorAll(".info").forEach(student => {
     student.addEventListener("click", open);
   });
@@ -304,8 +299,12 @@ function squadStudents() {
         document.querySelector(".squad_btn").textContent = "Remove student from squad";
         student.squadTeam = true;
         setTimeout(function() {
+          document.querySelector(".squad_btn").textContent = "Add student to squad";
+        }, 3000);
+        setTimeout(function() {
           removeSquadTeam(id);
         }, 3000);
+
         // console.log(student.squadTeam);
       } else if (student.id == id && student.squadTeam == true) {
         document.querySelector(".squad_btn").textContent = "Add to squad";
@@ -388,13 +387,17 @@ function expellStudents(event) {
     let studentExpelled = studentsFiltering.slice(indexOf, indexOf + 1);
     if (studentsFiltering[indexOf].firstName === "Sarah") {
     } else {
-      element.parentElement.remove();
-      studentExpelled = studentExpelled[0];
+      element.parentElement.classList.add("fade_out");
+      element.parentElement.addEventListener("animationend", () => {
+        element.parentElement.remove();
+        studentExpelled = studentExpelled[0];
 
-      expelledList.push(studentExpelled);
+        expelledList.push(studentExpelled);
 
-      studentsFiltering.splice(indexOf, 1);
-      allStudents.splice(indexOfAll, 1);
+        studentsFiltering.splice(indexOf, 1);
+        allStudents.splice(indexOfAll, 1);
+      });
+
       expell++;
 
       document.querySelector(".display_student_number").innerHTML = `Total number of students: ${allStudents.length}`;

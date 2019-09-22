@@ -188,8 +188,8 @@ function studentInfo() {
                         <h3>${student.house}</h3>
                         <p>${student.bloodStatus}</p>
                         <p>Gender: ${student.gender}</p>
-                       
-                         <p>${student.prefect != undefined ? student.prefect : ""}</p>
+                     
+                       <p>${student.prefect}</p>
                         <button class="prefect_btn" data-id=${student.id}></button>
                         <button class="squad_btn" data-id=${student.id}>Add to squad</button>
                         <div class="crest_house"><img></div>
@@ -236,13 +236,12 @@ function studentInfo() {
   document.querySelector("#luk button").addEventListener("click", () => {
     document.querySelector("#popup").style.display = "none";
   });
-
-  // console.log(allStudents);
 }
 
 // PREFECT
 
 function prefectStudents() {
+  // setting prefect, adding different styles to button depending on wether or not you have chosen prefect
   console.log("hej");
   console.log(allStudents);
   const id = this.dataset.id;
@@ -259,6 +258,7 @@ function prefectStudents() {
 }
 
 function prefectGryffindor(student) {
+  // setting the prefect on each team, with a maximum of 2 students
   const prefect = gryffindor.filter(object => object.prefect.includes("prefect"));
   console.log(prefect.length == 2);
   if (student.prefect == "" && prefect.length == 2) {
@@ -266,6 +266,7 @@ function prefectGryffindor(student) {
   }
 }
 function prefectHufflepuf(student) {
+  // setting the prefect on each team, with a maximum of 2 students
   const prefect = hufflepuf.filter(object => object.prefect.includes("prefect"));
   console.log(prefect.length == 2);
   if (student.prefect == "" && prefect.length == 2) {
@@ -273,6 +274,7 @@ function prefectHufflepuf(student) {
   }
 }
 function prefectsRavenclaw(student) {
+  // setting the prefect on each team, with a maximum of 2 students
   const prefect = ravenclaw.filter(object => object.prefect.includes("prefect"));
   console.log(prefect.length == 2);
   if (student.prefect == "" && prefect.length == 2) {
@@ -280,6 +282,7 @@ function prefectsRavenclaw(student) {
   }
 }
 function prefectSlytherin(student) {
+  // setting the prefect on each team, with a maximum of 2 students
   const prefect = slytherin.filter(object => object.prefect.includes("prefect"));
   console.log(prefect.length == 2);
   if (student.prefect == "" && prefect.length == 2) {
@@ -387,7 +390,7 @@ function expellStudents(event) {
     let studentExpelled = studentsFiltering.slice(indexOf, indexOf + 1);
     if (studentsFiltering[indexOf].firstName === "Sarah") {
     } else {
-      element.parentElement.classList.add("fade_out");
+      element.parentElement.classList.add("fade_out2");
       element.parentElement.addEventListener("animationend", () => {
         element.parentElement.remove();
         studentExpelled = studentExpelled[0];

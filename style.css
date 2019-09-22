@@ -260,6 +260,22 @@ button:hover {
   }
 }
 
+.fade_out2 {
+  animation-name: fade_out2_kf;
+  animation-duration: 1.5s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fade_out2_kf {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
 .ani {
   background-color: black;
 }
